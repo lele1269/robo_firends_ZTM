@@ -9,6 +9,8 @@ const Searchbox = ({searchfield, searchChange}) =>{
         type="search"
         placeholder="Search-Robots"
         onChange={searchChange} //proprietà HTML nativa onChange
+                                //che riceve i valori che arrivato dall'evento
+
         >
       </input>
     </div>

@@ -4,6 +4,7 @@ import CardList from '../components/CardList'
 import Searchbox from '../components/Searchbox'
 import './App.css'
 import Scroll from '../components/Scroll'
+import ErrorBoundry from '../components/ErrorBoundry'
 
 class App extends Component { //utilizzo degli state di React
   constructor(){
@@ -14,23 +15,26 @@ class App extends Component { //utilizzo degli state di React
     }
   }
 
+
+
   componentDidMount(){
   fetch('https://jsonplaceholder.typicode.com/users')
     .then(response => {
-      return response.json()})
-    .then(users => {
-      this.setState({robots: users})
+      return response.json()}) //response in formato json
+    .then(user => {
+      this.setState({robots: user}) //selezione ed imposta lo state come da sintassi standard di REACT
     })
-    .catch(console.log())
+    .catch(console.log('catching response',Response)) //Intercetta evenuali errori
     ;
   }
 
+//Questa funzione ha il compito di memorizzare il valore dell'evento inserito nel searchbox da passare allo STATE dell'app
   onSearchChange = (event) => { //funzione passata come metodo al searchBox per intercettare l'evento
-      this.setState({searchField: event.target.value})
+      this.setState({searchField: event.target.value }) //target.value ritorna il valore passato dall'evento
       }
 
   render(){
-    const {robots, searchField} = this.state
+    const {robots, searchField} = this.state //destrutturazione di assegnazione dei valori di state a due variabili
     const filteredRobots = robots.filter(robots =>{
         return robots.name.toLowerCase().includes(searchField.toLowerCase())
       })
@@ -41,7 +45,9 @@ class App extends Component { //utilizzo degli state di React
             <h1 className="f1">RoboFriends</h1>
             <Searchbox searchChange={this.onSearchChange}/>
             <Scroll>
-              <CardList robots={filteredRobots}/>
+              <ErrorBoundry>
+                <CardList robots={filteredRobots}/>
+              </ErrorBoundry>
             </Scroll>
           </div>
         );
